@@ -1,0 +1,16 @@
+{
+  "name": "nodetransfer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "scp": "0.0.3",
+    "yargs": "^3.31.0"
+  }
+}
