@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "md5-file": "^2.0.4",
     "scp": "0.0.3",
     "yargs": "^3.31.0"
   }
