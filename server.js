@@ -27,11 +27,10 @@ function handleRequest(request, response) {
         scp.scp({
             path: transferFilePath,
             username: 'root',
-	    password: 'password',
+            password: 'password',
             host: sourceHost,
             port: sourcePort
         }, FILEDIR, function (err) {
-            console.log('File Transfered ');
             if (err) {
                 response.writeHead(400, {'Content-Type': 'text/plain'});
                 console.log('Error: SCP FAILED ON ' + transferFilePath);
@@ -39,23 +38,21 @@ function handleRequest(request, response) {
             } else {
                 var actualmd5 = '';
 
-		setTimeout(function() {
-		    fs.readFile(FILEDIR + path.basename(transferFilePath), function (err, buf) {
-                    if (err) {
-                        console.log('Couldnt read file');
-			console.log(err);
-                    } else {
-                        actualmd5 = md5(buf);
-                        if (actualmd5 === fmd5) {
-                            response.writeHead(200, {'Content-Type': 'text/plain'});
-                            response.write('Transfer successful');
-                            response.end();
-                            console.log('Success');
+                fs.readFile(FILEDIR + path.basename(transferFilePath), function (err, buf) {
+                        if (err) {
+                            console.log('Couldnt read file');
+                console.log(err);
+                        } else {
+                            actualmd5 = md5(buf);
+                            if (actualmd5 === fmd5) {
+                                response.writeHead(200, {'Content-Type': 'text/plain'});
+                                response.write('Transfer successful');
+                                response.end();
+                                console.log('Success');
+                            }
                         }
-                    }
-                });
-		}, 1000);
-                
+                    });
+
             }
         });
     }
