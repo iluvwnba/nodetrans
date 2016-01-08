@@ -12,6 +12,7 @@ var http = require('http'),
 if(argv._[0] && argv._[1]){
     destinationHost = argv._[0];
     destinationPort = argv._[1];
+	watchDir = argv._[2];
 }else{
     console.log('Incorrect parameters');
     return 1;
