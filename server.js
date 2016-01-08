@@ -5,6 +5,9 @@ var http = require('http'),
     path = require('path'),
     fs = require('fs');
 
+var Rsync = require('rsync');
+
+
 var sourceHost;
 var sourcePort;
 var transferFilePath;
@@ -24,13 +27,13 @@ function handleRequest(request, response) {
     if (request.headers.filename && request.headers.hash) {
         transferFilePath = request.headers.filename;
         fmd5 = request.headers.hash;
-        scp.scp({
-            path: transferFilePath,
-            username: 'root',
-            password: 'password',
-            host: sourceHost,
-            port: sourcePort
-        }, FILEDIR, function (err) {
+       var rsync = new Rsync()
+            .shell('ssh')
+            .flags('az')
+            .source(sourceHost + ':' + transferFilePath)
+            .destination(FILEDIR);
+        rsync.execute(
+            function (err) {
             if (err) {
                 response.writeHead(400, {'Content-Type': 'text/plain'});
                 console.log('Error: SCP FAILED ON ' + transferFilePath);
