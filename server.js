@@ -2,7 +2,8 @@ var http = require('http'),
     scp = require('scp'),
     argv = require('yargs').argv,
     md5 = require('md5'),
-    path = require('path');
+    path = require('path'),
+    fs = require('fs');
 
 var sourceHost;
 var sourcePort;
@@ -30,27 +31,25 @@ function handleRequest(request, response){
             port:sourcePort,
             path: FILEDIR
         }, function(err, stdout, stderr){
+	   console.log('File Transfered ');
 	   if (err){
 		response.writeHead(400, {'Content-Type': 'text/plain'});
-		response.write(stderr);
 		console.log('Error');
-		console.log(path);
 	   }else{
         var actualmd5 = '';
-        fs.readFile(path.basename(transferFilePath), function(err, buf) {
+        fs.readFile(FILEDIR + path.basename(transferFilePath), function(err, buf) {
             if(err){
-                console.log(err);
+		console.log('Couldnt read file');
             }else{
                 actualmd5 = md5(buf);
-            }
-        });
-        console.log('MD5:    ' + actualmd5);
 		if(actualmd5 === fmd5){
 		    response.writeHead(200, {'Content-Type': 'text/plain'} );
 		    response.write('Transfer successful');
 		    response.end();
       		    console.log('Success');
 		}
+            }
+        });
 	   }
 	});
     } 
