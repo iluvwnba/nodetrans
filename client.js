@@ -8,13 +8,13 @@ var http = require('http'),
     chokidar = require('chokidar'),
     fs = require('fs'),
     destinationHost, destinationPort, watchDir;
-	var req;
+var req;
 
-if(argv._[0] && argv._[1]){
+if (argv._[0] && argv._[1]) {
     destinationHost = argv._[0];
     destinationPort = argv._[1];
-	watchDir = argv._[2];
-}else{
+    watchDir = argv._[2];
+} else {
     console.log('Incorrect parameters');
     return 1;
 }
@@ -26,8 +26,7 @@ var watcher = chokidar.watch(watchDir, {
 });
 
 
-
-callback = function(response) {
+callback = function (response) {
     var str = '';
 //	console.log(`STATUS: ${response.statusCode}`);
 //  console.log(`HEADERS: ${JSON.stringify(response.headers)}`);
@@ -40,28 +39,28 @@ callback = function(response) {
 
     //the whole response has been recieved, so we just print it out here
     response.on('end', function () {
-		console.log('DONE');
+        console.log('DONE');
     });
 };
 
 // Add event listeners.
-watcher.on('add', function(path){
+watcher.on('add', function (path) {
     var fmd5;
-    fs.readFile(path, function(err, buf) {
+    fs.readFile(path, function (err, buf) {
         fmd5 = (md5(buf));
-		var options = {
-			host: destinationHost,
-			port: destinationPort,
-			headers:{
-				host: destinationHost,
-				port: destinationPort,
-				filename: path,
-				hash: fmd5
-			}
-		};
-		//console.log(options);
-		req = http.request(options, callback);
-		req.end();
+        var options = {
+            host: destinationHost,
+            port: destinationPort,
+            headers: {
+                host: destinationHost,
+                port: destinationPort,
+                filename: path,
+                hash: fmd5
+            }
+        };
+        //console.log(options);
+        req = http.request(options, callback);
+        req.end();
     });
 });
 
