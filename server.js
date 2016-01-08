@@ -34,12 +34,10 @@ function handleRequest(request, response){
 		response.writeHead(400, {'Content-Type': 'text/plain'});
 		response.write(stderr);
 		console.log('Error');
+		console.log(path);
 	   }else{
 		var baseFile =  FILEDIR + path.basename(transferFilePath);
-		console.log(md5(baseFile.toString()));
-		console.log(fmd5);
 		if(md5(baseFile.toString()) === fmd5){
-		    console.log('WAITING');
 		    response.writeHead(111, {'Content-Type': 'text/plain'} );
 		    response.write('Transfer successful');
 		    response.end();
