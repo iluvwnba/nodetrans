@@ -38,8 +38,13 @@ function handleRequest(request, response){
 	   }else{
         var actualmd5 = '';
         fs.readFile(path.basename(transferFilePath), function(err, buf) {
-            actualmd5 = md5(buf);
+            if(err){
+                console.log(err);
+            }else{
+                actualmd5 = md5(buf);
+            }
         });
+        console.log('MD5:    ' + actualmd5);
 		if(actualmd5 === fmd5){
 		    response.writeHead(200, {'Content-Type': 'text/plain'} );
 		    response.write('Transfer successful');
