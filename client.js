@@ -4,8 +4,9 @@
 
 var http = require('http'),
     argv = require('yargs').argv,
-    md5 = require('md5-file'),
+    md5 = require('md5'),
     chokidar = require('chokidar'),
+    fs = require('fs'),
     destinationHost, destinationPort, watchDir;
 
 
@@ -42,7 +43,10 @@ callback = function(response) {
 
 // Add event listeners.
 watcher.on('add', function(path){
-    var fmd5 = md5(path);
+    var fmd5;
+    fs.readFile(path, function(err, buf) {
+        fmd5 = (md5(buf));
+    });
     var options = {
         host: destinationHost,
         port: destinationPort,
