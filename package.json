@@ -10,11 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "checksum": "^0.1.1",
     "chokidar": "^1.4.2",
+    "ftp": "^0.3.10",
     "md5": "^2.0.0",
     "rsync": "^0.4.0",
     "scp": "0.0.3",
     "scp2": "^0.2.2",
+    "sftps": "^0.2.8",
     "yargs": "^3.31.0"
   }
 }
