@@ -4,11 +4,10 @@
 
 var http = require('http'),
     argv = require('yargs').argv,
-    md5 = require('md5'),
     chokidar = require('chokidar'),
+    checksum = require('checksum'),
     fs = require('fs'),
-    destinationHost, destinationPort, watchDir;
-var req;
+    destinationHost, destinationPort, watchDir, req;
 
 if (argv._[0] && argv._[1]) {
     destinationHost = argv._[0];
@@ -39,28 +38,30 @@ callback = function (response) {
 
     //the whole response has been recieved, so we just print it out here
     response.on('end', function () {
-        console.log('DONE');
+//		console.log(`HEADERS: ${JSON.stringify(response)}`);
+		if(response.statusCode === 200){
+			console.log('Transfer successful');
+		}else{
+			console.log('Transfer successful');
+		}
     });
 };
 
 // Add event listeners.
 watcher.on('add', function (path) {
-    var fmd5;
-    fs.readFile(path, function (err, buf) {
-        fmd5 = (md5(buf));
-        var options = {
-            host: destinationHost,
-            port: destinationPort,
-            headers: {
-                host: destinationHost,
-                port: destinationPort,
-                filename: path,
-                hash: fmd5
-            }
-        };
-        //console.log(options);
-        req = http.request(options, callback);
-        req.end();
-    });
+    checksum.file(path, function(err, sum){
+		var options = {
+			host: destinationHost,
+    		port: destinationPort,
+    		headers: {
+				host: destinationHost,
+				port: destinationPort,
+				filename: path,
+				hash: sum
+    		}
+		};
+		req = http.request(options, callback);
+		req.end();
+	});
 });
 
